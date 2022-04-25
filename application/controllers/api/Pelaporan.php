@@ -40,7 +40,7 @@ class Pelaporan extends REST_Controller
     {
         // upload image
         if ($_FILES['image']['size'] == 0) {
-            $name = 'no_file';
+            $image = 'no_file';
         } else {
             if (is_uploaded_file($_FILES['image']['tmp_name'])) {
                 // check for image type 
@@ -50,75 +50,52 @@ class Pelaporan extends REST_Controller
 
                 if (in_array($ext, $allowed)) {
                     $tmp_name = $_FILES["image"]["name"];
-                    $image = "./assets/images/";
+                    $image = "assets/images/";
 
                     $lname = basename($_FILES["image"]["name"]);
                     $newfilename = 'image_' . round(microtime(true)) . '.' . $ext;
                     move_uploaded_file($image, $newfilename);
                     $name = $newfilename;
-
-                    $data = [
-                        'id_user' => $this->post('id_user'),
-                        'alamat_pelapor' => $this->post('alamat_pelapor'),
-                        'no_hp' => $this->post('no_hp'),
-                        'korban_kekerasan' => $this->post('korban_kekerasan'),
-                        'tanggal_pelaporan' => date('Y-m-d H:i:s'),
-                        'tempat_kejadian' => $this->post('tempat_kejadian'),
-                        'alamat_kejadian' => $this->post('alamat_kejadian'),
-                        'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-                        'image' => $name,
-                        'id_status' => 1,
-                        'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
-                        'id_desa' => $this->post('id_desa'),
-                        'date_created' => date('Y-m-d H:i:s')
-
-
-                    ];
-                    if ($this->pelaporan->createPelaporan($data) > 0) {
-                        $this->response([
-                            'status' => true,
-                            'message' => 'data pelaporan berhasil ditambah'
-                        ], REST_Controller::HTTP_CREATED);
-                    } else {
-                        $this->response([
-                            'status' => false,
-                            'message' => 'data pelaporan gagal ditambahkan'
-                        ], REST_Controller::HTTP_BAD_REQUEST);
-                    }
                 } else {
                     $Return['status'] = '0';
                     $Return['messasge'] = 'file gagal di upload';
                 }
             }
         }
-        // if ($_FILES['image']['size'] == 0) {
-        //         $image = 'no_file';
-        // } else {
-        //     return $gambar = $image
-        // }
-        //  $config['upload_path']    = './assets/images/';
-        // $config['allowed_types']  = 'gif|jpg|png';
-        // // $config['file_name']      = $this->id_pelapor;
-        // $config['overwrite']      = true;
-        // $config['max_size']       = 1024;
-
-        // $this->load->library('upload', $config);
-
-        // if ($this->upload->do_upload('image')) {
-        //     return $this->upload->data("file_name");
-        // }
-
-        // return "default.png";
 
         // insert to database
+        $data = [
+            'id_user' => $this->post('id_user'),
+            'alamat_pelapor' => $this->post('alamat_pelapor'),
+            'no_hp' => $this->post('no_hp'),
+            'korban_kekerasan' => $this->post('korban_kekerasan'),
+            'tanggal_pelaporan' => date('Y-m-d H:i:s'),
+            'tempat_kejadian' => $this->post('tempat_kejadian'),
+            'alamat_kejadian' => $this->post('alamat_kejadian'),
+            'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
+            'image' => $name,
+            'id_status' => 1,
+            'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
+            'id_desa' => $this->post('id_desa'),
+            'date_created' => date('Y-m-d H:i:s')
 
+        ];
 
-
+        if ($this->pelaporan->createPelaporan($data) > 0) {
+            $this->response([
+                'status' => true,
+                'message' => 'data pelaporan berhasil ditambah'
+            ], REST_Controller::HTTP_CREATED);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'data pelaporan gagal ditambahkan'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
     }
 
     public function _uploadImage()
     {
-
         $config['upload_path']    = './assets/images/';
         $config['allowed_types']  = 'gif|jpg|png';
         // $config['file_name']      = $this->id_pelapor;
@@ -131,15 +108,6 @@ class Pelaporan extends REST_Controller
             return $this->upload->data("file_name");
         }
 
-        return $this->upload->data("file_name");
-        if (!$this->upload->do_upload('userfile')) {
-            $error = array('error' => $this->upload->display_errors());
-
-            $this->load->view('upload_form', $error);
-        } else {
-            $data = array('upload_data' => $this->upload->data());
-
-            $this->load->view('upload_success', $data);
-        }
+        return "default.png";
     }
 }
