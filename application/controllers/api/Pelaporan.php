@@ -117,12 +117,9 @@ class Pelaporan extends REST_Controller
         // return "default.png";
         if (!$this->upload->do_upload('image')) {
             $error = array('error' => $this->upload->display_errors());
-
-            $this->load->view('upload_form', $error);
         } else {
-            $data = array('upload_data' => $this->upload->data());
 
-            $this->load->view('upload_success', $data);
+            return $this->upload->data("file_name");
         }
     }
 }
