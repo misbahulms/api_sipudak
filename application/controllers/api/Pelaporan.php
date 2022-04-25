@@ -39,29 +39,29 @@ class Pelaporan extends REST_Controller
     public function index_post()
     {
         // upload image
-        // if ($_FILES['image']['size'] == 0) {
-        //     $image = 'no_file';
-        // } else {
-        //     if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-        //         // check for image type 
-        //         $allowed = array('png', 'jpg', 'jpeg');
-        //         $filename = $_FILES['image']['name'];
-        //         $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if ($_FILES['image']['size'] == 0) {
+            $name = 'no_file';
+        } else {
+            if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+                // check for image type 
+                $allowed = array('png', 'jpg', 'jpeg');
+                $filename = $_FILES['image']['name'];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-        //         if (in_array($ext, $allowed)) {
-        //             $tmp_name = $_FILES["image"]["name"];
-        //             $image = "images/";
+                if (in_array($ext, $allowed)) {
+                    $tmp_name = $_FILES["image"]["name"];
+                    $image = "./assets/images/";
 
-        //             $lname = basename($_FILES["image"]["name"]);
-        //             $newfilename = 'image_' . round(microtime(true)) . '.' . $ext;
-        //             move_uploaded_file($image, $newfilename);
-        //             $name = $newfilename;
-        //         } else {
-        //             $Return['status'] = '0';
-        //             $Return['messasge'] = 'file gagal di upload';
-        //         }
-        //     }
-        // }
+                    $lname = basename($_FILES["image"]["name"]);
+                    $newfilename = 'image_' . round(microtime(true)) . '.' . $ext;
+                    move_uploaded_file($image, $newfilename);
+                    $name = $newfilename;
+                } else {
+                    $Return['status'] = '0';
+                    $Return['messasge'] = 'file gagal di upload';
+                }
+            }
+        }
         // if ($_FILES['image']['size'] == 0) {
         //         $image = 'no_file';
         // } else {
@@ -80,20 +80,7 @@ class Pelaporan extends REST_Controller
         // }
 
         // return "default.png";
-        $config = array(
-            'upload_path' => "./assets/images/",
-            'allowed_types' => "gif|jpg|png|jpeg|pdf",
-            'overwrite' => TRUE,
-            'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
-            'max_height' => "768",
-            'max_width' => "1024"
-        );
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload()) {
-            $data = array('upload_data' => $this->upload->data());
-        } else {
-            $error = array('error' => $this->upload->display_errors());
-        }
+
         // insert to database
         $data = [
             'id_user' => $this->post('id_user'),
@@ -104,7 +91,7 @@ class Pelaporan extends REST_Controller
             'tempat_kejadian' => $this->post('tempat_kejadian'),
             'alamat_kejadian' => $this->post('alamat_kejadian'),
             'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-            'image' => $data,
+            'image' => $name,
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
@@ -141,11 +128,14 @@ class Pelaporan extends REST_Controller
         }
 
         return $this->upload->data("file_name");
-        // if (!$this->upload->do_upload('image')) {
-        //     $error = array('error' => $this->upload->display_errors());
-        // } else {
+        if (!$this->upload->do_upload('userfile')) {
+            $error = array('error' => $this->upload->display_errors());
 
-        //     return $this->upload->data("file_name");
-        // }
+            $this->load->view('upload_form', $error);
+        } else {
+            $data = array('upload_data' => $this->upload->data());
+
+            $this->load->view('upload_success', $data);
+        }
     }
 }
