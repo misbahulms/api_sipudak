@@ -55,7 +55,7 @@ class Pelaporan extends REST_Controller
                     $lname = basename($_FILES["image"]["name"]);
                     $newfilename = 'image_' . round(microtime(true)) . '.' . $ext;
                     move_uploaded_file($image, $newfilename);
-                    $name = $newfilename;
+                    return $name = $newfilename;
                 } else {
                     $Return['status'] = '0';
                     $Return['messasge'] = 'file gagal di upload';
