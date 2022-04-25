@@ -80,7 +80,20 @@ class Pelaporan extends REST_Controller
         // }
 
         // return "default.png";
-
+        $config = array(
+            'upload_path' => "./assets/images/",
+            'allowed_types' => "gif|jpg|png|jpeg|pdf",
+            'overwrite' => TRUE,
+            'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+            'max_height' => "768",
+            'max_width' => "1024"
+        );
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload()) {
+            $data = array('upload_data' => $this->upload->data());
+        } else {
+            $error = array('error' => $this->upload->display_errors());
+        }
         // insert to database
         $data = [
             'id_user' => $this->post('id_user'),
@@ -91,7 +104,7 @@ class Pelaporan extends REST_Controller
             'tempat_kejadian' => $this->post('tempat_kejadian'),
             'alamat_kejadian' => $this->post('alamat_kejadian'),
             'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-            'image' => $this->_uploadImage(),
+            'image' => $data,
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
