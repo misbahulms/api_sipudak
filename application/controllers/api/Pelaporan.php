@@ -50,7 +50,7 @@ class Pelaporan extends REST_Controller
 
                 if (in_array($ext, $allowed)) {
                     $tmp_name = $_FILES["image"]["name"];
-                    $image = "uploads/";
+                    $image = "images/";
 
                     $lname = basename($_FILES["image"]["name"]);
                     $newfilename = 'image_' . round(microtime(true)) . '.' . $ext;
