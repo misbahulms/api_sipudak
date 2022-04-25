@@ -62,6 +62,11 @@ class Pelaporan extends REST_Controller
         //         }
         //     }
         // }
+        // if ($_FILES['image']['size'] == 0) {
+        //         $image = 'no_file';
+        // } else {
+        //     return $gambar = $image
+        // }
 
         // insert to database
         $data = [
@@ -73,7 +78,7 @@ class Pelaporan extends REST_Controller
             'tempat_kejadian' => $this->post('tempat_kejadian'),
             'alamat_kejadian' => $this->post('alamat_kejadian'),
             'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-            'image' => $this->_uploadImage(),
+            'image' => $this->_uploadImage($this->post('image')),
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
@@ -94,8 +99,9 @@ class Pelaporan extends REST_Controller
         }
     }
 
-    public function _uploadImage()
+    public function _uploadImage($image)
     {
+
         $config['upload_path']    = './assets/images/';
         $config['allowed_types']  = 'gif|jpg|png';
         // $config['file_name']      = $this->id_pelapor;
@@ -104,7 +110,7 @@ class Pelaporan extends REST_Controller
 
         $this->load->library('upload', $config);
 
-        if ($this->upload->do_upload('image')) {
+        if ($this->upload->do_upload($image)) {
             return $this->upload->data("file_name");
         }
 
