@@ -67,6 +67,19 @@ class Pelaporan extends REST_Controller
         // } else {
         //     return $gambar = $image
         // }
+        $config['upload_path']    = './assets/images/';
+        $config['allowed_types']  = 'gif|jpg|png';
+        // $config['file_name']      = $this->id_pelapor;
+        $config['overwrite']      = true;
+        $config['max_size']       = 1024;
+
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('image')) {
+            $gambar = $this->upload->data("file_name");
+        }
+
+
 
         // insert to database
         $data = [
@@ -78,7 +91,7 @@ class Pelaporan extends REST_Controller
             'tempat_kejadian' => $this->post('tempat_kejadian'),
             'alamat_kejadian' => $this->post('alamat_kejadian'),
             'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-            'image' => $this->_uploadImage(),
+            'image' => $gambar,
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
