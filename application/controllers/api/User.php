@@ -150,4 +150,26 @@ class User extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
+
+    public function profil_get($id = null)
+    {
+        $check_data = $this->db->get_where('users', ['id_user' => $id]);
+
+        if ($id) {
+            if ($check_data) {
+                $data = $this->db->get_where('users', ['id_user' => $id])->row_array();
+
+                $this->response($data, REST_Controller::HTTP_OK);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ], 404);
+            }
+        } else {
+            $data = $this->db->get('users')->result();
+
+            $this->response($data, REST_Controller::HTTP_OK);
+        }
+    }
 }
