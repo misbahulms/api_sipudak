@@ -38,6 +38,7 @@ class Pelaporan extends REST_Controller
 
     public function index_post()
     {
+
         // upload image
         if ($_FILES['image']['size'] == 0) {
             $name = 'no_file';
