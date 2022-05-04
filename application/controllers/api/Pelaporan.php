@@ -40,7 +40,7 @@ class Pelaporan extends REST_Controller
     {
 
         // upload image
-        $name = 'no_file';
+        // $name = 'no_file';
         // if ($_FILES['image']['size'] == 0) {
         // } else {
         //     if (isset($_FILES['image']['tmp_name'])) {
@@ -49,48 +49,53 @@ class Pelaporan extends REST_Controller
         $filename = $_FILES['image']['name'];
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-        if (in_array($ext, $allowed)) {
-            // $tmp_name = $_FILES["image"]["name"];
-            // $image = "assets/images/";
+        // if (in_array($ext, $allowed)) {
+        // $tmp_name = $_FILES["image"]["name"];
+        // $image = "assets/images/";
 
-            // $lname = basename($_FILES["image"]["name"]);
-            // $newfilename = $image . 'image_' . round(microtime(true)) . '.' . $ext;
+        // $lname = basename($_FILES["image"]["name"]);
+        // $newfilename = $image . 'image_' . round(microtime(true)) . '.' . $ext;
 
-            // // echo "<pre>";
-            // print_r(move_uploaded_file($image, $newfilename));
+        // // echo "<pre>";
+        // print_r(move_uploaded_file($image, $newfilename));
+        // die;
+
+        // $res = move_uploaded_file($image, $newfilename);
+        // $name = $newfilename;
+
+        $config['upload_path']    = './assets/images/';
+        $config['allowed_types']  = 'gif|jpg|png';
+        // $config['file_name']      = $this->id_pelapor;
+        $config['overwrite']      = true;
+        $config['max_size']       = 1024;
+
+        $this->load->library('upload', $config);
+
+
+
+        if ($this->upload->do_upload('image')) {
+
+            $full_path = $this->upload->data('full_path');
+            $exp = explode('assets', $full_path);
+            $path = base_url() .  "assets{$exp[1]}";
+
+            // echo "<pre>";
+            // print_r($path);
             // die;
 
-            // $res = move_uploaded_file($image, $newfilename);
-            // $name = $newfilename;
-
-            $config['upload_path']    = './assets/images/';
-            $config['allowed_types']  = 'gif|jpg|png';
-            // $config['file_name']      = $this->id_pelapor;
-            $config['overwrite']      = true;
-            $config['max_size']       = 1024;
-
-            $this->load->library('upload', $config);
-
-
-
-            if ($this->upload->do_upload('image')) {
-
-                $full_path = $this->upload->data('full_path');
-                $exp = explode('assets', $full_path);
-                $path = base_url() .  "assets{$exp[1]}";
-
-                // echo "<pre>";
-                // print_r($path);
-                // die;
-
-                $name = $path;
-            }
+            $name = $path;
         } else {
             $this->response([
                 'status' => false,
                 'message' => 'File gagal upload'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
+        // } else {
+        //     $this->response([
+        //         'status' => false,
+        //         'message' => 'File gagal upload'
+        //     ], REST_Controller::HTTP_BAD_REQUEST);
+        // }
         //     } else {
         //         $this->response([
         //             'status' => false,
