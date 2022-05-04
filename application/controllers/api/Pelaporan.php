@@ -86,8 +86,10 @@ class Pelaporan extends REST_Controller
                         $name = $path;
                     }
                 } else {
-                    $Return['status'] = '0';
-                    $Return['messasge'] = 'file gagal di upload';
+                    $this->response([
+                        'status' => false,
+                        'message' => 'File gagal upload'
+                    ], REST_Controller::HTTP_BAD_REQUEST);
                 }
             }
         }
