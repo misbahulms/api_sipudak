@@ -43,7 +43,7 @@ class Pelaporan extends REST_Controller
         $name = 'no_file';
         if ($_FILES['image']['size'] == 0) {
         } else {
-            if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+            if (isset($_FILES['image']['tmp_name'])) {
                 // check for image type 
                 $allowed = array('png', 'jpg', 'jpeg');
                 $filename = $_FILES['image']['name'];
