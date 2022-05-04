@@ -91,6 +91,11 @@ class Pelaporan extends REST_Controller
                         'message' => 'File gagal upload'
                     ], REST_Controller::HTTP_BAD_REQUEST);
                 }
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'File gagal upload x'
+                ], REST_Controller::HTTP_BAD_REQUEST);
             }
         }
 
