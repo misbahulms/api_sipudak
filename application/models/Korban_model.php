@@ -5,9 +5,9 @@ class Korban_model extends CI_model
     public function getKorban($id = null)
     {
         if ($id === null) {
-            return $this->db->get('korban')->num_rows();
+            return $this->db->get('korban')->result_array();
         } else {
-            return $this->db->get_where('korban', ['id_korban' => $id])->num_rows();
+            return $this->db->get_where('korban', ['id_korban' => $id])->result_array();
         }
     }
 

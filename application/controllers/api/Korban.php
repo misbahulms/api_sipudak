@@ -36,25 +36,27 @@ class Korban extends REST_Controller
         }
     }
 
-    public function data_get()
-    {
-        $jk = $this->get()['jk'];
-        $query = $this->db->select('COUNT(id_korban) as korban')
-            ->where('jenis_kelamin', $jk)
-            ->from('korban')->get()->row_array();
-        // return $query;
-        if ($query) {
-            $this->response([
-                'status' => true,
-                'data' => $query
-            ], REST_Controller::HTTP_OK);
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'id not found'
-            ], REST_Controller::HTTP_NOT_FOUND);
-        }
-    }
+    // public function data_get()
+    // {
+    //     $jkl = $this->get()['jkl'];
+    //     $jkp = $this->get()['jkp'];
+    //     $query = $this->db->select('COUNT(id_korban) as korban')
+    //         ->where('jenis_kelamin', $jkl)
+    //         ->where('jenis_kelamin', $jkp)
+    //         ->from('korban')->get()->row_array();
+    //     // return $query;
+    //     if ($query) {
+    //         $this->response([
+    //             'status' => true,
+    //             'data' => $query
+    //         ], REST_Controller::HTTP_OK);
+    //     } else {
+    //         $this->response([
+    //             'status' => false,
+    //             'message' => 'id not found'
+    //         ], REST_Controller::HTTP_NOT_FOUND);
+    //     }
+    // }
 
     // public function index_get()
     // {
