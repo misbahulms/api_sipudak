@@ -2,7 +2,7 @@
 
 use Restserver\Libraries\REST_Controller;
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 require APPPATH . '/libraries/REST_Controller.php';
 
@@ -12,6 +12,28 @@ class Login extends REST_Controller
     {
         parent::__construct();
         $this->load->model('User_model', 'user');
+    }
+
+    public function index_get()
+    {
+        $id = $this->get('id');
+        if ($id === null) {
+            $user = $this->user->getUser();
+        } else {
+            $user = $this->user->getUser($id);
+        }
+
+        if ($user) {
+            $this->response([
+                'status' => true,
+                'data' => $user
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'id not found'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
     }
 
     public function index_post()
@@ -29,9 +51,8 @@ class Login extends REST_Controller
         } else {
             $this->response([
                 'status' => false,
-                'message' => 'nomor hp tidak ditemukan'
+                'data' => 'nomor hp tidak ditemukan'
             ], REST_Controller::HTTP_NOT_FOUND);
         }
     }
-
 }

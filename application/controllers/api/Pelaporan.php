@@ -63,7 +63,7 @@ class Pelaporan extends REST_Controller
         // $res = move_uploaded_file($image, $newfilename);
         // $name = $newfilename;
 
-        $config['upload_path']    = './assets/images/';
+        $config['upload_path']    = './assets/images/korban/';
         $config['allowed_types']  = 'gif|jpg|png';
         // $config['file_name']      = $this->id_pelapor;
         $config['overwrite']      = true;
@@ -122,7 +122,8 @@ class Pelaporan extends REST_Controller
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
-            'date_created' => date('Y-m-d H:i:s')
+            'date_created' => date('Y-m-d H:i:s'),
+            'notifikasi' => '0'
 
         ];
 
