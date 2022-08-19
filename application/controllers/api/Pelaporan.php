@@ -63,7 +63,7 @@ class Pelaporan extends REST_Controller
         // $res = move_uploaded_file($image, $newfilename);
         // $name = $newfilename;
 
-        $config['upload_path']    = './assets/images/korban/';
+        $config['upload_path']    = './assets/images/';
         $config['allowed_types']  = 'gif|jpg|png';
         // $config['file_name']      = $this->id_pelapor;
         $config['overwrite']      = true;
