@@ -7,7 +7,7 @@ class User_model extends CI_model
         if ($id === null) {
             return $this->db->get('users')->result_array();
         } else {
-            return $this->db->get_where('users', ['id_user' => $id])->result_array();
+            return $this->db->get_where('users', ['id_user' => $id])->row_array();
         }
     }
 

@@ -39,74 +39,31 @@ class Pelaporan extends REST_Controller
     public function index_post()
     {
 
-        // upload image
-        // $name = 'no_file';
-        // if ($_FILES['image']['size'] == 0) {
-        // } else {
-        //     if (isset($_FILES['image']['tmp_name'])) {
-        // check for image type 
-        $allowed = array('png', 'jpg', 'jpeg');
-        $filename = $_FILES['image']['name'];
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        // $allowed = array('png', 'jpg', 'jpeg');
+        // $filename = $_FILES['image']['name'];
+        // $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-        // if (in_array($ext, $allowed)) {
-        // $tmp_name = $_FILES["image"]["name"];
-        // $image = "assets/images/";
+        // $config['upload_path']    = './assets/images/';
+        // $config['allowed_types']  = 'gif|jpg|png';
+        // // $config['file_name']      = $this->id_pelapor;
+        // $config['overwrite']      = true;
+        // $config['max_size']       = 1024;
 
-        // $lname = basename($_FILES["image"]["name"]);
-        // $newfilename = $image . 'image_' . round(microtime(true)) . '.' . $ext;
+        // $this->load->library('upload', $config);
 
-        // // echo "<pre>";
-        // print_r(move_uploaded_file($image, $newfilename));
-        // die;
+        // if ($this->upload->do_upload('image')) {
 
-        // $res = move_uploaded_file($image, $newfilename);
-        // $name = $newfilename;
+        //     $full_path = $this->upload->data('full_path');
+        //     $exp = explode('assets', $full_path);
+        //     $path = base_url() .  "assets{$exp[1]}";
 
-        $config['upload_path']    = './assets/images/';
-        $config['allowed_types']  = 'gif|jpg|png';
-        // $config['file_name']      = $this->id_pelapor;
-        $config['overwrite']      = true;
-        $config['max_size']       = 1024;
-
-        $this->load->library('upload', $config);
-
-
-
-        if ($this->upload->do_upload('image')) {
-
-            $full_path = $this->upload->data('full_path');
-            $exp = explode('assets', $full_path);
-            $path = base_url() .  "assets{$exp[1]}";
-
-            // echo "<pre>";
-            // print_r($path);
-            // die;
-
-            $name = $path;
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'File gagal upload'
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
+        //     $name = $path;
         // } else {
         //     $this->response([
         //         'status' => false,
         //         'message' => 'File gagal upload'
         //     ], REST_Controller::HTTP_BAD_REQUEST);
         // }
-        //     } else {
-        //         $this->response([
-        //             'status' => false,
-        //             'message' => 'File gagal upload x'
-        //         ], REST_Controller::HTTP_BAD_REQUEST);
-        //     }
-        // }
-
-        // echo "<pre>";
-        // print_r($res);
-        // die;
 
         // insert to database
         $data = [
@@ -118,7 +75,7 @@ class Pelaporan extends REST_Controller
             'tempat_kejadian' => $this->post('tempat_kejadian'),
             'alamat_kejadian' => $this->post('alamat_kejadian'),
             'kronologis_kejadian' => $this->post('kronologis_kejadian', true),
-            'image' => $name,
+            'image' => $this->_uploadImage(),
             'id_status' => 1,
             'hubungan_dengan_korban' => $this->post('hubungan_dengan_korban', true),
             'id_desa' => $this->post('id_desa'),
@@ -142,7 +99,7 @@ class Pelaporan extends REST_Controller
 
     public function _uploadImage()
     {
-        $config['upload_path']    = './assets/images/';
+        $config['upload_path']    = './assets/images/korban/';
         $config['allowed_types']  = 'gif|jpg|png';
         // $config['file_name']      = $this->id_pelapor;
         $config['overwrite']      = true;
@@ -151,9 +108,14 @@ class Pelaporan extends REST_Controller
         $this->load->library('upload', $config);
 
         if ($this->upload->do_upload('image')) {
-            return $this->upload->data("file_name");
-        }
+            $full_path = $this->upload->data('full_path');
+            $exp = explode('assets', $full_path);
+            $path = "assets{$exp[1]}";
 
-        return "default.png";
+            // return base_url() . $path;
+            return $this->upload->data("file_name");
+        } else {
+            return 'default.png';
+        }
     }
 }
