@@ -46,7 +46,8 @@ class Login extends REST_Controller
         if ($result) {
             $this->response([
                 'status' => true,
-                'data' => 'selamat anda berhasil login'
+                'data' => $result,
+                'message' => 'selamat anda berhasil login'
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([

@@ -31,7 +31,7 @@ class User_model extends CI_model
 
     function loginApi($nomorhp)
     {
-        $this->db->select('no_hp, password, nama, id_user');
+        $this->db->select('no_hp, nama, id_user');
         $this->db->from('users');
         $this->db->where('users.no_hp =' . $nomorhp);
         $query = $this->db->get();
